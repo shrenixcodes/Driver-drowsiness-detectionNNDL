@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+.ipynb_checkpoints/
+.venv/
+venv/
+env/
+
+# Datasets (large, user-provided, not versioned)
+# The "!dir/**/" line un-ignores directories themselves (not their contents)
+# so that a nested .gitkeep can still be re-included - Git refuses to
+# re-include a file whose parent directory is excluded, so without this the
+# .gitkeep negations below would silently do nothing.
+data/train/**
+!data/train/**/
+!data/train/**/.gitkeep
+data/validation/**
+!data/validation/**/
+!data/validation/**/.gitkeep
+data/test/**
+!data/test/**/
+!data/test/**/.gitkeep
+data/sequences/**
+!data/sequences/**/
+!data/sequences/**/.gitkeep
+
+# Trained models / checkpoints (large binary artifacts)
+models/*.pt
+models/*.pth
+outputs/checkpoints/*.pt
+outputs/checkpoints/*.pth
+!outputs/checkpoints/.gitkeep
+!models/.gitkeep
+
+# Generated outputs
+outputs/figures/*.png
+outputs/metrics/*.json
+outputs/metrics/*.csv
+!outputs/figures/.gitkeep
+!outputs/metrics/.gitkeep
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Streamlit
+.streamlit/

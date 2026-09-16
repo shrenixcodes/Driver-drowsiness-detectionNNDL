@@ -47,5 +47,9 @@ Thumbs.db
 .vscode/
 .idea/
 
+# Claude Code local tooling config (dev-server launch config etc.) - local
+# convenience only, not part of the project deliverable.
+.claude/
+
 # Streamlit
 .streamlit/

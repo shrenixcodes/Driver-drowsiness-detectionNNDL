@@ -308,9 +308,12 @@ class FaceLandmarkDetector:
         """Degraded-but-functional fallback: bounding boxes only.
 
         EAR is approximated from the detected eye box's height/width ratio
-        (a coarse proxy - real EAR needs eyelid landmarks). MAR and head
-        pose are not available without landmarks and are left as None; the
-        drowsiness logic treats None gracefully (see drowsiness_logic.py).
+        (a coarse proxy - real EAR needs eyelid landmarks). Because the eye
+        cascade rarely fires at all on a closed eye, "face found, 0 eyes
+        found" is mapped to HAAR_NO_EYES_FOUND_EAR rather than None - see
+        that constant's docstring in config.py. MAR and head pose are not
+        available without landmarks and are left as None; the drowsiness
+        logic treats None gracefully there (see drowsiness_logic.py).
         """
         h, w = frame_bgr.shape[:2]
         gray = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2GRAY)
@@ -343,7 +346,14 @@ class FaceLandmarkDetector:
 
         # Normalize the crude height/width proxy into a range comparable to
         # true EAR (~0.15 closed .. ~0.35 open) via an empirical scale factor.
-        ear = float(np.mean(ear_estimates)) * 0.5 if ear_estimates else None
+        # If the eye cascade found NOTHING, that is itself the closed-eye
+        # signal for this backend (see HAAR_NO_EYES_FOUND_EAR) - it must not
+        # be reported as None/"unknown", or a genuinely closed eye can never
+        # register as drowsy on this backend.
+        if ear_estimates:
+            ear = float(np.mean(ear_estimates)) * 0.5
+        else:
+            ear = config.HAAR_NO_EYES_FOUND_EAR
 
         return FaceDetectionResult(
             success=True,

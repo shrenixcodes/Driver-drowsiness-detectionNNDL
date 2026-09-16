@@ -108,6 +108,12 @@ MEDIAPIPE_MIN_DETECTION_CONFIDENCE = 0.5
 MEDIAPIPE_MIN_TRACKING_CONFIDENCE = 0.5
 HAAR_SCALE_FACTOR = 1.1
 HAAR_MIN_NEIGHBORS = 5
+# haarcascade_eye.xml is trained almost entirely on OPEN eyes, so a closed
+# eye typically yields zero detections rather than a different shape. In the
+# Haar backend, "face found but 0 eyes found" is itself the closed-eye
+# signal and is mapped to this EAR value (comfortably below EAR_THRESHOLD)
+# instead of being treated as missing data.
+HAAR_NO_EYES_FOUND_EAR = 0.05
 
 # --------------------------------------------------------------------------
 # Webcam / app
